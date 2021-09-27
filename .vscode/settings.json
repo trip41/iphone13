@@ -1,0 +1,27 @@
+{
+  "eslint.format.enable": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "search.exclude": {
+    "src/api/generated/schema.graphql": true,
+    "src/api/generated/index.ts": true,
+    "src/serviceWorker.ts": true
+  },
+  "files.exclude": {
+    "build": true,
+    "yarn.lock": true
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "auto",
+  "css.lint.unknownAtRules": "ignore",
+  "css.lint.propertyIgnoredDueToDisplay": "ignore",
+  "prettier.configPath": ".prettierrc.json"
+}
