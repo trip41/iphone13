@@ -1,7 +1,10 @@
 import express from 'express';
 import config from './config';
 import fetch from 'node-fetch';
-// import cron from 'node-cron';
+import cron from 'node-cron';
+import SendgridService from './SendgridService';
+
+SendgridService.init();
 
 const app = express();
 
@@ -19,12 +22,18 @@ app.get('/healthz', (_, res) => {
 const colors: any = {
   'MLTR3LL/A': 'Gold',
   'MLTT3LL/A': 'Sierra Blue',
+  'MLTQ3LL/A': 'Silver',
+  'MLTP3LL/A': 'Graphite',
 };
 
 function getUrlForModel(model: string, zip?: string) {
   return `https://www.apple.com/shop/fulfillment-messages?pl=true&cppart=UNLOCKED/US&parts.0=${model}&location=${
     zip || config.zip
   }`;
+}
+
+function formatAvailability(storeResults: Array<{ store: string; availability: string }>) {
+  return storeResults.map((storeResult) => `${storeResult.store} ${storeResult.availability}`).join('\n');
 }
 
 async function fetchAvailability(zip?: string) {
@@ -57,11 +66,24 @@ async function fetchAvailability(zip?: string) {
   return output;
 }
 
-// cron.schedule('* * * * *', () => {
-//   fetchAvailability().then((output) => {
-//     console.log('\n\n', output, '\n\n');
-//   });
-// });
+cron.schedule('*/15 * * * *', () => {
+  fetchAvailability().then((results) => {
+    const available: any[] = [];
+    for (const result of results) {
+      if (result.availability === 'Unavailable') {
+        console.log(result.model, 'unavailable');
+        continue;
+      } else {
+        available.push(result);
+      }
+    }
+
+    if (available.length > 0) {
+      const body = available.map((item) => `${item.model}\n${formatAvailability(item.availability)}`).join('\n\n');
+      SendgridService.sendEmail(body);
+    }
+  });
+});
 
 app.listen(config.PORT, () => {
   console.log(`Server is running at http://localhost:${config.PORT}`);

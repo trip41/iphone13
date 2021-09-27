@@ -13,9 +13,8 @@ class SendgridService {
     sgMail.setApiKey(config.sendgridApiKey);
   }
 
-  public static async sendEmail() {
-    const text = 'test iphone email body';
-    const subject = 'test iphone email subject';
+  public static async sendEmail(text: string) {
+    const subject = 'iPhone 13 Pros available!';
     const msg: MailDataRequired = {
       to: config.email!,
       from: config.email!,
