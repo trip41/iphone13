@@ -3,7 +3,6 @@ import config from './config';
 import fetch from 'node-fetch';
 // import cron from 'node-cron';
 
-const PORT = 8000;
 const app = express();
 
 app.get('/', (req, res) => {
@@ -64,6 +63,6 @@ async function fetchAvailability(zip?: string) {
 //   });
 // });
 
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+app.listen(config.PORT, () => {
+  console.log(`Server is running at http://localhost:${config.PORT}`);
 });

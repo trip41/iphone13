@@ -12,6 +12,7 @@ const config = {
   zip: process.env.ZIP,
   email: process.env.EMAIL,
   sendgridApiKey: process.env.SENDGRID_API_KEY,
+  PORT: process.env.PORT || 8000,
 };
 
 export default config;
