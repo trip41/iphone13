@@ -13,6 +13,10 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/healthz', (_, res) => {
+  res.json({ status: 'ok' });
+});
+
 const colors: any = {
   'MLTR3LL/A': 'Gold',
   'MLTT3LL/A': 'Sierra Blue',
