@@ -17,7 +17,7 @@ class SendgridService {
     const subject = 'iPhone 13 Pros available!';
     const msg: MailDataRequired = {
       to: config.email!,
-      from: config.email!,
+      from: config.fromEmail!,
       text,
       subject: subject,
       hideWarnings: true,

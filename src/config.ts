@@ -10,6 +10,7 @@ if (!models) {
 const config = {
   models: models.split(','),
   zip: process.env.ZIP,
+  fromEmail: process.env.FROM_EMAIL || process.env.EMAIL,
   email: process.env.EMAIL,
   sendgridApiKey: process.env.SENDGRID_API_KEY,
   PORT: process.env.PORT || 8000,
