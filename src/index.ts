@@ -26,6 +26,8 @@ const colors: any = {
   'MLTP3LL/A': 'Graphite',
 };
 
+let lastSend = '';
+
 function getUrlForModel(model: string, zip?: string) {
   return `https://www.apple.com/shop/fulfillment-messages?pl=true&cppart=UNLOCKED/US&parts.0=${model}&location=${
     zip || config.zip
@@ -66,7 +68,7 @@ async function fetchAvailability(zip?: string) {
   return output;
 }
 
-cron.schedule('*/15 * * * *', () => {
+cron.schedule('* * * * *', () => {
   fetchAvailability().then((results) => {
     const available: any[] = [];
     for (const result of results) {
@@ -74,13 +76,17 @@ cron.schedule('*/15 * * * *', () => {
         console.log(result.model, 'unavailable');
         continue;
       } else {
+        console.log(result.model, 'available');
         available.push(result);
       }
     }
 
     if (available.length > 0) {
       const body = available.map((item) => `${item.model}\n${formatAvailability(item.availability)}`).join('\n\n');
-      SendgridService.sendEmail(body);
+      if (body !== lastSend) {
+        SendgridService.sendEmail(body);
+        lastSend = body;
+      }
     }
   });
 });
